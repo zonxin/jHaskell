@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <!-- script src="http://cdn.bootcss.com/seajs/3.0.1/sea.js"></script> -->
+        <script src="../dest/jHaskell.min.js"></script>
+        <title>Demo</title>
+        <style>
+            body { background:#95a5a6; font-size:25px;line-height:1.5em; }
+            div { width:600px;margin:0px auto;background:#ecf0f1;padding:2em;
+                box-shadow:3px 3px 8px #7f8c8d;border-radius:10px}
+        </style>
+    </head>
+    <body>
+    <script> 
+jHaskell.makeGlobal();
+function guard(e) { return e ? [Void] : []; }
+    </script>
+<div>
+<p>
+1、 现有两个函数 father mother分别从数据库读取一个人的父母（可能在数据库中不存在），
+求函数获取一个的父母，祖父母，外祖父母（若其中任意一个不存在则失败）？
+</p>
+
+	<script>
+(function(){
+    function father(names){
+        if(Math.random() > 0.9) { return Nothing; }
+        var dad = names + "'s father";
+        return Just(dad);
+    }
+    function mother(names){
+        if(Math.random() > 0.9) { return Nothing; }
+        var mon = names + "'s mother";
+        return Just(mon);
+    }
+    function getGrandparents(names)
+    {   // doM 仅仅是一个语法糖，可是 JS不支持宏，就只能这样生成了，虽然不建议
+        var code = doM("\
+                dad <- father(names); \
+                mom <- mother(names); \
+                gp1 <- father(dad);   \
+                gp2 <- mother(dad);   \
+                gp3 <- father(mom);   \
+                gp4 <- mother(mom);   \
+                returnM([dad,mom,gp1,gp2,gp3,gp4],Maybe); ","Output Pretty Code");
+        // console.log(code);
+        return eval(code);
+    }
+    console.log(getGrandparents("Peter1").show());
+    console.log(getGrandparents("Peter2").show());
+    console.log(getGrandparents("Peter3").show());
+    console.log(getGrandparents("Peter4").show());
+})();
+    </script>
+<p>
+2、 先有两个函数 father mother分别从数据库读取一个人的父母（可能在数据库中不存在），
+求函数获取一个的父母，祖父母，外祖父母（若其中任意一个不存在则返回错误，并返回错误原因）？
+</p>
+	<script>
+(function(){
+    function father(names){
+        if(Math.random() > 0.85) { 
+            var msg = "Can not find " + names + "'s father "
+            return Left(msg);
+        }
+        var dad = names + "'s father";
+        return Right(dad);
+    }
+    function mother(names){
+        if(Math.random() > 0.85) { 
+            var msg = "Can not find " + names + "'s momther"
+            return Left(msg);
+        }
+        var dad = names + "'s mother";
+        return Right(dad);
+    }
+    function getGrandparents(names)
+    {   // doM 仅仅是一个语法糖，可是 JS不支持宏，就只能这样生成了，虽然不建议
+        var code = doM("\
+                dad <- father(names); \
+                mom <- mother(names); \
+                gp1 <- father(dad);   \
+                gp2 <- mother(dad);   \
+                gp3 <- father(mom);   \
+                gp4 <- mother(mom);   \
+                returnM([dad,mom,gp1,gp2,gp3,gp4],Either); ","Output Pretty Code");
+        // console.log(code);
+        return eval(code);
+    }
+    console.log("=================================================")
+    console.log(getGrandparents("Peter1").show());
+    console.log(getGrandparents("Peter2").show());
+    console.log(getGrandparents("Peter3").show());
+    console.log(getGrandparents("Peter4").show());
+    console.log(getGrandparents("Peter5").show());
+    console.log(getGrandparents("Peter6").show());
+    console.log(getGrandparents("Peter7").show());
+    console.log(getGrandparents("Peter8").show());
+    console.log(getGrandparents("Peter9").show());
+})();
+</script>
+<p>
+ 3、查找所有最大边（整数）长小于 10 的所有直角三角形，输出其边长
+</p>
+<script>
+    // [(a,b,c) | a <-[1..10], b<-[1..a], c<-[1..b],a*a == b*b + c*c]
+    var list = doM("\
+            a <- enumFromTo(1,10); \
+            b <- enumFromTo(1,a);  \
+            c <- enumFromTo(1,b);   \
+            guard(a*a == b*b + c*c); \
+            returnM([a,b,c],Array); \
+            ");
+    // console.log(list);
+    var ret = eval(list);
+    console.log("=================================================")
+    console.log(ret.show());
+</script>
+<p>
+ 4、在一个 8x8 的棋盘上，象棋中的马是否可以经过三步从一个点到达另一个点。
+</p>
+<script>
+function Point(x,y) { this.x = x; this.y = y; }
+Point.prototype.equal = function(pos) { return this.x === pos.x && this.y === pos.y; }
+Point.prototype.show = function(pos)  { return "(" + this.x +"," + this.y+ ")"; }
+
+
+function moveKnight(pos)
+{
+    var allowed = enumFromTo(1,8);
+    var code = doM("\
+            x = pos.x; y = pos.y; \
+            next <- [new Point(x+2,y-1),new Point(x+2,y+1),new Point(x-2,y-1),new Point(x-2,y+1), \
+                     new Point(x+1,y-2),new Point(x+1,y+2),new Point(x-1,y-2),new Point(x-1,y+2)]; \
+            guard(elem(next.x,allowed) && elem(next.y,allowed)); \
+            [next]; \
+            ","");
+    // console.log(code);
+    return eval(code);
+}
+
+function canReachIn3(from,to)
+{
+    var all = returnM(from,Array).bindM(moveKnight).bindM(moveKnight).bindM(moveKnight);
+    // var all = [from].bindM(moveKnight).bindM(moveKnight).bindM(moveKnight);
+    // var all = moveKnight(from).bindM(moveKnight).bindM(moveKnight);
+    // console.log(all.show());
+    return elem(to,all);
+}
+console.log("===========================================================");
+var start = new Point(6,2);
+var end1  = new Point(6,1);
+var end2  = new Point(7,3);
+console.log(start.show() + " canReachIn3 " + end1.show());
+console.log(canReachIn3(start,end1));
+console.log(start.show() + " canReachIn3 " + end2.show());
+console.log(canReachIn3(start,end2));
+</script>
+</div>
+    </body>
+    
+</html>
