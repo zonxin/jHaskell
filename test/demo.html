@@ -61,18 +61,19 @@ function guard(e) { return e ? [Void] : []; }
 </p>
 	<script>
 (function(){
+    var throwError = Left;
     function father(names){
-        if(Math.random() > 0.85) { 
+        if(Math.random() > 0.80) { 
             var msg = "Can not find " + names + "'s father "
-            return Left(msg);
+            return throwError(msg);
         }
         var dad = names + "'s father";
         return Right(dad);
     }
     function mother(names){
-        if(Math.random() > 0.85) { 
+        if(Math.random() > 0.80) { 
             var msg = "Can not find " + names + "'s momther"
-            return Left(msg);
+            return throwError(msg);
         }
         var dad = names + "'s mother";
         return Right(dad);

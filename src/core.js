@@ -1,13 +1,15 @@
 define([
     './libES/extendObject.js',
     './currying.js',
-    './compose.js'
-],function (extendObject,currying,compose){
+    './compose.js',
+    './instanceW.js'
+],function (extendObject,currying,compose,instanceW){
 
     var jHaskell = {
         extend:extendObject,
         currying:currying,
         compose:compose,
+        instanceW:instanceW,
         id: function (x) { return x; },
         makeGlobal: function(names,ext){
             var k;

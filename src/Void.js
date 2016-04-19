@@ -1,8 +1,8 @@
 define([ ],function(){
     // data () = ()
 
-    function Void_(){}
-    var Void = new Void_();
+    var Void = function(){};
+    Void = new Void();
     Void.prototype = Void.constructor.prototype;
     // instance Eq ()
     // instance Ord ()
