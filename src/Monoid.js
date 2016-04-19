@@ -49,5 +49,9 @@ define([
             return this.concat(list);
         }
     });
+    instanceW(Monoid,String,{
+        mempty:"",
+        mappend: function(s) { return this.toString() + s.toString(); }
+    });
     return Monoid;
 });

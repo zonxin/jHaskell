@@ -80,5 +80,9 @@ define([
             return false;
         }
     });
+    instanceW(Eq,String,{
+        equal:function(s){ return this.toString() === s.toString(); }
+    });
+
     return Eq;
 });

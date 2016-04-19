@@ -61,11 +61,18 @@ define([
                 if(ret instanceof List){
                     result = result.concat(ret);
                 }else{
-                    throw "TypeError";
+                    throw "List.bindM: the type of fn returned is not List.";
                 }
             }
             return result;
         }       
+    });
+    instanceW(Monad,String,{
+        bindM: function (fn){
+            var len = this.length,arr = [],i,ret;
+            for(i=0;i<len;i++){ arr.push(fn(this[i])); }
+            return arr.join("");
+        }
     });
     return Monad;
 });

@@ -34,8 +34,13 @@ define([
             return new Right(fn(obj.value));
         }
     });
-    instanceW(Functor,List,{
-        fmap: map
+    instanceW(Functor,List,{ fmap: map });
+    instanceW(Functor,String,{ 
+        fmap: function(fn) {
+            var arr = [],i,len = this.length;
+            for(i=0;i<len;i++){ arr.push(fn(this[i])); }
+            return arr.join("");
+        }
     });
     return Functor;
 });

@@ -46,7 +46,7 @@ define([
             if(obj) { return new Left(obj.value); }
             obj = this.isRight();
             return mValue.fmap(obj.value);
-        },
+        }
     });
     instanceW(Applicative,List,{
         pure: function (x){ return [x]; },
@@ -62,7 +62,11 @@ define([
                 }
             }
             return result;
-        },
+        }
+    });
+    instanceW(Applicative,String,{
+        pure: function(c) { return c.charAt(0); },
+        applyTo: function() { throw this[0] + " is not a function"; }
     });
     return Applicative;
 });

@@ -115,5 +115,12 @@ define([
             return EQ;
         }
     });
+    instanceW(Ord,String,{
+        compare: function(s){ 
+            if(this.toString() < s.toString()) { return LT; }
+            else if(this.toString() === s.toString()) { return EQ; }
+            else {  return GT; }
+        }
+    });
     return Ord;
 });

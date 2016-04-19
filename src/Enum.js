@@ -79,5 +79,10 @@ define([
         },
         toNum: function () { return this.valueOf(); }
     });
+    // instance Enum Char
+    instanceW(Enum,String,{
+        toEnum: function(num){ return String.fromCharCode(num); },
+        toNum: function() { return this.charCodeAt(0); }
+    });
     return Enum;
 });
