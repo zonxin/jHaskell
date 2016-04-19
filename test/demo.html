@@ -19,7 +19,7 @@ function guard(e) { return e ? [Void] : []; }
 <div>
 <p>
 1、 现有两个函数 father mother分别从数据库读取一个人的父母（可能在数据库中不存在），
-求函数获取一个的父母，祖父母，外祖父母（若其中任意一个不存在则失败）？
+写一个函数获取一个人的父母，祖父母，外祖父母（若其中任意一个不存在则失败）
 </p>
 
 	<script>
@@ -36,14 +36,16 @@ function guard(e) { return e ? [Void] : []; }
     }
     function getGrandparents(names)
     {   // doM 仅仅是一个语法糖，可是 JS不支持宏，就只能这样生成了，虽然不建议
-        var code = doM("\
-                dad <- father(names); \
-                mom <- mother(names); \
-                gp1 <- father(dad);   \
-                gp2 <- mother(dad);   \
-                gp3 <- father(mom);   \
-                gp4 <- mother(mom);   \
-                returnM([dad,mom,gp1,gp2,gp3,gp4],Maybe); ","Output Pretty Code");
+        var code = doM(function(){
+                dad <- father(names); 
+                mom <- mother(names); 
+                gp1 <- father(dad);   
+                gp2 <- mother(dad);   
+                gp3 <- father(mom);   
+                gp4 <- mother(mom);   
+                returnM([dad,mom,gp1,gp2,gp3,gp4],Maybe);
+            }, "Output Pretty Code");
+
         // console.log(code);
         return eval(code);
     }
@@ -54,8 +56,8 @@ function guard(e) { return e ? [Void] : []; }
 })();
     </script>
 <p>
-2、 先有两个函数 father mother分别从数据库读取一个人的父母（可能在数据库中不存在），
-求函数获取一个的父母，祖父母，外祖父母（若其中任意一个不存在则返回错误，并返回错误原因）？
+2、 现有两个函数 father mother分别从数据库读取一个人的父母（可能在数据库中不存在），
+写一个函数获取一个人的父母，祖父母，外祖父母（若其中任意一个不存在则返回错误，并返回错误原因）
 </p>
 	<script>
 (function(){
@@ -77,14 +79,15 @@ function guard(e) { return e ? [Void] : []; }
     }
     function getGrandparents(names)
     {   // doM 仅仅是一个语法糖，可是 JS不支持宏，就只能这样生成了，虽然不建议
-        var code = doM("\
-                dad <- father(names); \
-                mom <- mother(names); \
-                gp1 <- father(dad);   \
-                gp2 <- mother(dad);   \
-                gp3 <- father(mom);   \
-                gp4 <- mother(mom);   \
-                returnM([dad,mom,gp1,gp2,gp3,gp4],Either); ","Output Pretty Code");
+        var code = doM(function(){
+                dad <- father(names); 
+                mom <- mother(names); 
+                gp1 <- father(dad);   
+                gp2 <- mother(dad);   
+                gp3 <- father(mom);   
+                gp4 <- mother(mom);   
+                returnM([dad,mom,gp1,gp2,gp3,gp4],Either);
+            }, "Output Pretty Code");
         // console.log(code);
         return eval(code);
     }
@@ -105,13 +108,13 @@ function guard(e) { return e ? [Void] : []; }
 </p>
 <script>
     // [(a,b,c) | a <-[1..10], b<-[1..a], c<-[1..b],a*a == b*b + c*c]
-    var list = doM("\
-            a <- enumFromTo(1,10); \
-            b <- enumFromTo(1,a);  \
-            c <- enumFromTo(1,b);   \
-            guard(a*a == b*b + c*c); \
-            returnM([a,b,c],Array); \
-            ");
+    var list = doM(function(){
+            a <- enumFromTo(1,10);
+            b <- enumFromTo(1,a);
+            c <- enumFromTo(1,b);
+            guard(a*a == b*b + c*c);
+            returnM([a,b,c],Array);
+        } ,"");
     // console.log(list);
     var ret = eval(list);
     console.log("=================================================")
@@ -129,13 +132,13 @@ Point.prototype.show = function(pos)  { return "(" + this.x +"," + this.y+ ")"; 
 function moveKnight(pos)
 {
     var allowed = enumFromTo(1,8);
-    var code = doM("\
-            x = pos.x; y = pos.y; \
-            next <- [new Point(x+2,y-1),new Point(x+2,y+1),new Point(x-2,y-1),new Point(x-2,y+1), \
-                     new Point(x+1,y-2),new Point(x+1,y+2),new Point(x-1,y-2),new Point(x-1,y+2)]; \
-            guard(elem(next.x,allowed) && elem(next.y,allowed)); \
-            [next]; \
-            ","");
+    var code = doM(function(){
+            x = pos.x; y = pos.y;
+            next <- [new Point(x+2,y-1),new Point(x+2,y+1),new Point(x-2,y-1),new Point(x-2,y+1),
+                     new Point(x+1,y-2),new Point(x+1,y+2),new Point(x-1,y-2),new Point(x-1,y+2)];
+            guard(elem(next.x,allowed) && elem(next.y,allowed));
+            [next]; 
+        },"");
     // console.log(code);
     return eval(code);
 }

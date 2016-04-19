@@ -1,9 +1,16 @@
 define([
 ],function(){
-    function doM(code)
+    function doM(func)
     { 
-        var lines = code.split(";"),
-               parsed = "", i,line,segs,seg,hasLet = "";
+        function getFunctionBody(fn){
+            var strfn = fn.toString().trim(),
+                reg =/^function(\s+\w*\s*)?\(\w*\)[\w\W]*\{([\w\W]*)\}$/,
+                fnarr = reg.exec(strfn);
+                return fnarr ? fnarr[2] : ""; 
+        }
+        var code = getFunctionBody(func),
+            lines = code.split(";"),
+            parsed = "", i,line,segs,seg,hasLet = "";
         for(i=lines.length - 1;i>=0;i--){
             line = lines[i].trim();
             // skip blank line
