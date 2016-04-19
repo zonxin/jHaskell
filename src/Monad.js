@@ -1,9 +1,16 @@
 define([
     './core.js',
     './libES/extendClass.js',
-    './libES/extendObject.js',
-    './Applicative.js'
-],function(jHaskell,extendClass,extendObject,Applicative){
+    './Applicative.js',
+    './instanceW.js',
+    './Maybe/Maybe.js',
+    './Maybe/Nothing.js',
+    './Maybe/Just.js',
+    './Either/Either.js',
+    './Either/Left.js',
+    './Either/Right.js',
+    './List.js'
+],function(jHaskell,extendClass,Applicative,instanceW,Maybe,Nothing,Just,Either,Left,Right,List){
     // Class Applicative m => Monad m where
     //     return :: a -> m a
     //     (>>=) :: m a -> (a -> m b) -> m b
@@ -14,7 +21,7 @@ define([
     //    3. (m >>= f) >>= g  =  m >>= (\x -> f x >>= g)    -- associativity
     function Monad(){}
     extendClass(Monad,Applicative);
-    extendObject(Monad.prototype,{
+    jHaskell.extend(Monad.prototype,{
         returnM: function (x) { return this.pure(x); },
         bindM: function (fn) { throw "Monad: bindM :: m a -> (a -> m b) -> m b"; },
         // a >> b = a >>= \_ -> b
@@ -29,6 +36,36 @@ define([
         },
         bindM: function(mValue,fn) { return mValue.bindM(fn); },
         thenM: function(ma,mb) { return ma.thenM(mb); }
+    });
+    instanceW(Monad,Maybe,{
+        bindM: function (fn){
+        if(this === Nothing) { return Nothing; }
+        return fn.call(null,this.value);
+        }
+    });
+    instanceW(Monad,Either,{
+        bindM: function(fn){
+            var obj = this.isLeft();
+            if(obj) { return new Left(obj.value); }
+            obj = this.isRight();
+            return fn.call(arguments[1],obj.value);
+        }
+    });
+    instanceW(Monad,List,{
+         bindM: function (fn){
+            var len = this.length,
+                result = [],
+                i,ret;
+            for(i=0; i<len; i++){
+                ret = fn(this[i]);
+                if(ret instanceof List){
+                    result = result.concat(ret);
+                }else{
+                    throw "TypeError";
+                }
+            }
+            return result;
+        }       
     });
     return Monad;
 });

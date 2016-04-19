@@ -1,5 +1,9 @@
 define([
     './Maybe.js'
 ],function(Maybe){
-    return Maybe.Just;
+    function Just(value)
+    {
+        return new Maybe(value);
+    }
+    return Just;
 });

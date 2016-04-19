@@ -1,6 +1,14 @@
 define([
-    './core.js'
-],function(jHaskell){
+    './core.js',
+    './instanceW.js',
+    './Void.js',
+    './Bool/Bool.js',
+    './Ordering/Ordering.js',
+    './Ordering/LT.js',
+    './Ordering/EQ.js',
+    './Ordering/GT.js',
+    './Float.js'
+],function(jHaskell,instanceW,Void,Bool,Ordering,LT,EQ,GT,Float){
     function Enum(){}
     // class Enum a where
     //   succ   :: a -> a
@@ -26,6 +34,8 @@ define([
         toNum: function(){ throw "Enum.toNum:"; }
     };
     jHaskell.extend({
+        succ: function (e) { return e.succ(); },
+        pred: function (e) { return e.pred(); },
         toEnum: function(num,hint) {return hint.prototype.toEnum(num);},
         fromEnum: function (e) { return e.toNum(); },
         enumFromTo: function(s,e){
@@ -44,5 +54,30 @@ define([
             return ret;
         }
     });
-
+    // instance Enum () where
+    instanceW(Enum,Void,{ // Void
+        toEnum: function(num) { if(num === 0) {return Void; }},
+        toNum: function() { return 0; }
+    });
+    // instance Enum Bool where
+    instanceW(Enum,Bool,{ // Bool
+        toEnum:function (num){ var arr = [false,true]; return arr[num]; },
+        toNum: function (){ return (this.valueOf() === false) ? 0 : 1; }
+    });
+    // instance Enum Ordering where
+    instanceW(Enum,Ordering,{// Ordering
+        toEnum: function (num){ var arr = [LT,EQ,GT]; return arr[num]; },
+        toNum: function (){
+            switch (this){ case LT: return 0; case EQ: return 1; case GT: return 2; }
+        }
+    });
+    // instance Enum Float
+    instanceW(Enum,Float,{ // Float
+        toEnum: function (e) { 
+            if(typeof e !== "number"){ throw "Float.toEnum: TypeError"; }
+            return e; 
+        },
+        toNum: function () { return this.valueOf(); }
+    });
+    return Enum;
 });

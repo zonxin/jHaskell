@@ -8,8 +8,7 @@ define([
         extend:extendObject,
         currying:currying,
         compose:compose,
-        // show
-        show: function(showValue){ return showValue.show(); },
+        id: function (x) { return x; },
         makeGlobal: function(names,ext){
             var k;
             if(arguments.length === 0){
@@ -21,8 +20,7 @@ define([
                 return jHaskell;
             }
             if(arguments.length === 1) { ext = global; }
-            var len = arr.length,
-                i;
+            var len = arr.length, i;
             for(i=0;i<len;i++){
                 k = names[i];
                 if(this.hasOwnProperty(k)){
@@ -32,5 +30,6 @@ define([
             return jHaskell;
         }
     };
+    // ================= end core ======================================
     return jHaskell;
 });

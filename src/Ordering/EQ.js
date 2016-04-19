@@ -1,5 +1,6 @@
 define([
     './Ordering.js'
 ],function(Ordering){
-    return Ordering.EQ;
+     var EQ = new Ordering();
+    return EQ;
 });

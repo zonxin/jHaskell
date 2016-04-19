@@ -1,5 +1,6 @@
 define([
     './Ordering.js'
 ],function(Ordering){
-    return Ordering.LT;
+    var LT = new Ordering();
+    return  LT;
 });
