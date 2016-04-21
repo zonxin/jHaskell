@@ -1,5 +1,7 @@
 # Javascript Haskell Library
 
+一个可以极大减小代码量和减小函数粒度的库,做到只需要看到函数的声明就可以知道函数的大概作用。
+
 首先,安装 nodejs <https://nodejs.org/en/>, 安装过程中要选择安装 npm 模块。打开命令控制台执行以下命令。
 
     # 全局安装 grunt-cli 只需要安装一次, linux 可能需要管理员权限
@@ -142,6 +144,10 @@ Ord 类是指可以比较大小的数据类型,属于 Ord 类的数据类型必�
 
 比如 `compare(2,3).show()` 返回 `LT`。`show`的作用是将其转换成字符串。
 
+    compare(1,1).show(); // EQ
+    compare(LT,EQ).show(); // LT
+    compare("123","abc").show(); // LT
+
 ### 3. Enum 类(枚举型)
 
 在 C 中枚举型本质上是一个整数。在此,属于 Enum 的数据类型指可以转换成一个整数的
@@ -195,9 +201,12 @@ Ord 类是指可以比较大小的数据类型,属于 Ord 类的数据类型必�
 
     var p1 = new Point(4,5); 
     var p2 = new Point(4,5); 
+    var p3 = new Point(10,5);
     p1 === p2; // False
     p1.equal(p2); // True
-    elem(p1,[p2,p2,p2]); // True
+    p1.equal(p3); // False
+    p1.unequal(p3); // False
+    elem(p1,[p1,p2,p3]); // True
     // elem 判断一个变量的值是否在一个数组中出现
 
 
@@ -214,9 +223,9 @@ fmap接受两个参数，其中第一个的声明是(a -> b) ，也就是说是�
 fmap 的第二个参数就是 Maybe a 类型的，再如果 a 是Float 型那么，fmap的第二个参数
 才能确定为 Maybe Float。a b 可为相同或是不同类型 。例如
 
-    fmap(x=> x+1    ,Just(5)).show() == "Just 6"
-    fmap(x=> x+10   ,Just(5)).show() == "Just 5"
-    fmap(x=> x+"str",Just(5)).show() == "Just 5str"
+    fmap(x=> x+1    ,Just(5)).show(); // Just 6
+    fmap(x=> x+10   ,Just(5)).show(); // Just 15
+    fmap(x=> x+"str",Just(5)).show(); // Just 5str
 
 fmap 的作用就是将其中的数据拿出来,然后用这个数据作为函数的输入,然后把返回值放入
 这个函子中。
@@ -285,14 +294,15 @@ fn1~fn3 是可能出错的函数，如果出错直接返回 Nothing 就可以了
 。可是有些时候，我们希望在第二个匿名函数中也可以使用取出的这个 x，也就是 5。那
 么我们需要这样写 
 
+    function fn(x) { return Just(x+1); }
     Just(5).bindM( x=>( 
-        Just(x+1).bindM( y => 
-            Just [x,10*y]
-        )
+        fn(x).bindM( y => (
+            Just([x,10*y])
+        ))
     ));
 
 ，如果更长的话写起来就很麻烦了。而很多东西都是 Monad，因此这样的形式是很常见的
-。因此我们是不是可以定义一种简写的方式呢？于是jHaskell 中定义了一个语法糖，于是
+。因此我们是不是可以定义一种简写的方式呢？于是 jHaskell 中定义了一个语法糖，于是
 上面的代码可以写成：
 
     function fn(x) { return Just(x+1); }
@@ -304,9 +314,11 @@ fn1~fn3 是可能出错的函数，如果出错直接返回 Nothing 就可以了
     eval(code);
 
 `<-` 其实是 `=>` 倒过来写的意思(<=可能会在 Javascript 里用到，因此我们选了一个
-不常出现但也是合法的Javascript语句的<-，而且与Haskell中的相同)。因此在 doM 里面
+不常出现但也是合法的Javascript <-，而且与Haskell中的相同)。因此在 doM 里面
 对于 Maybe， <- 的意义就是从Just中取出对应的值(如果后面不是 Just 不再执行后面的
-语句，直接返回这个 Nothing,(bindM的定义)，最终返回值是 `Just([x,10*y])`
+语句，直接返回这个 Nothing,(bindM的定义)，最终返回值是 `Just([x,10*y])`。由于 Javascript
+是弱类型的语言，最后即使返回`[x,10*y]`，也不会有问题。只是`[x,10*y]` 和 `Nothing`
+不是统一类型的数据。`Nothing` 和 `Just([x,10*y])` 才是同种类型的数据。
 
     var code = jHaskell.doM(function(){
         x <- [1,2,3];
@@ -332,8 +344,11 @@ fn1~fn3 是可能出错的函数，如果出错直接返回 Nothing 就可以了
     }
     var ret = Array.prototype.concat.apply(null,arr);
 
+真的是等价的代码（虽然不是最优的，但是更多时候代码写的短远比效率高更重要，不是吗？
+写的短，减小写错的概率，写的短节省程序员的时间）
 仔细的人可能发现，在 Maybe 单子的例子里，其实
     
+    // 这种写法是不是特别像 gulp 里面的 pipe ？
     Just(5).bindM(x=>Just(x+1)).bindM(y=>Just(10*y));
     // 和
     Just(5).bindM(x=>(
@@ -352,7 +367,7 @@ fn1~fn3 是可能出错的函数，如果出错直接返回 Nothing 就可以了
 既然定义了新的类型类(class)，肯定要满足某种条件，比如Functor满足的条件，叫做 Functor
 Law, 否则多定义这个类还有什么意义。当然如果你在某个类型上定义一个`fmap`不满足
 Functor Law。jHaskell中没有任何的限制,但是你可能会得不到预期的结果,
-如果你定义一个 equal 和 unequal 不是相反的类型为 Eq 类那么，jHaskell 由 equal 函数自动
+如果你定义一个 equal 和 unequal 不是相反的数据类型为 Eq 类那么，jHaskell 自动
 给这个类型成生成的 unequal 函数显然就不是你预期的结果。
 
 ### 1. Functor law
@@ -433,8 +448,8 @@ Nothing 换成了 Left，而 Left 中是可以保存出错原因的。
 ### 7. Monoid 类（幺半群）
 
 为了简便,有时候我们把二元函数调用 `fn(a,b)` 写为 ``a `fn` b``（反引号`` ` ``，
-键盘左上角，数字1旁边那个），，这种形式的叫做中缀表达式，像加法 `+` 这样的也是
-中缀表达式 `2 + 3`。
+键盘左上角，数字1旁边那个），这种形式的叫做中缀表达式，像加法 `2 + 3` 也是
+中缀表达式。
 
     class Monoid a where
         mempty :: a   -- 仅仅是一个这种类型的数据,通常叫做单位元
@@ -449,8 +464,14 @@ Nothing 换成了 Left，而 Left 中是可以保存出错原因的。
         --  (a + b) + c = a + (b + c) 分配律
 
 当然因为某些原因,在此 Float 型暂时还没有被定义成 Monoid 类。但是字符串相对与字
-符串链接是一个 Monoid,单位元是 "" : `mappend("","abc") == "abc";
-mappend("abc","xyz") == "abcxyz"`
+符串链接是一个 Monoid,单位元是 "" : 
+    
+    "".mappend("abc"); // "abc"
+    "abc".mappend(""); // "abc"
+    "a".mappend("b").mappend("c"); // "abc"
+    "a".mappend(("b".mappend("c"))); // "abc"
+    // 其实就是
+    ("a" + "b") + "c" === "a" + ("b" + "c")
 
 ### 8. Applicative 类
 
@@ -468,8 +489,9 @@ List 是一个 Applicative:
 另外需要说明的是，其实如果一个类型是 Monad 也是一个 Applicative，return 和 pure
 是等价的。只是前人还没证明的时候就把 Monad 和 Applicative 分别放入了 Haskell 中
 。
-    returnM(10,Array)
-    pure(10,Array)
+
+    returnM(10,Array); // [10]
+    pure(10,Array); // [10]
 
 #### Applicative Law
 

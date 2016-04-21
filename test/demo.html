@@ -126,9 +126,10 @@ function guard(e) { return e ? [Void] : []; }
 </p>
 <script>
 function Point(x,y) { this.x = x; this.y = y; }
-Point.prototype.equal = function(pos) { return this.x === pos.x && this.y === pos.y; }
-Point.prototype.show = function(pos)  { return "(" + this.x +"," + this.y+ ")"; }
-
+instanceW(Eq,Point,{ equal: function(p) { return this.x===p.x && this.y===p.y; } });
+instanceW(Show,Point,{
+    show: function(p){ return "(" + this.x + "," + this.y + ")"; }
+});
 
 function moveKnight(pos)
 {
