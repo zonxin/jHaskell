@@ -14,9 +14,9 @@
 
 ## 零. 准备工作
 
-方便写代码，首先在网页里执行，`jHaskell.makeGlobal()`，这样，
+方便写代码，首先在网页里执行，`jHaskell.importAs()`，这样，
 `jHaskell.equal(1,2)` 就可以简写为`equal(1,2)`了。下载整个工程编译之后，可以直
-接打开 test/demo.html 在控制台里面执行下面的 Javascript 代码。
+接打开 test/demo.html 在浏览器的控制台里面执行下面的 Javascript 代码。
 
 ## 一. 数据类型(1)
 

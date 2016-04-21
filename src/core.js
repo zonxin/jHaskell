@@ -11,25 +11,16 @@ define([
         compose:compose,
         instanceW:instanceW,
         id: function (x) { return x; },
-        makeGlobal: function(names,ext){
+        importAs: function(mod,target){
             var k;
-            if(arguments.length === 0){
-                for(k in this){
-                    if(this.hasOwnProperty(k)){
-                        global[k] = this[k];
-                    }
-                }
-                return jHaskell;
+            if(arguments.length === 0) {
+                mod = jHaskell;
+                target = global;
+            }else if(arguments.length === 1){
+                target = mod;
+                mod = this;
             }
-            if(arguments.length === 1) { ext = global; }
-            var len = arr.length, i;
-            for(i=0;i<len;i++){
-                k = names[i];
-                if(this.hasOwnProperty(k)){
-                    global[k] = this[k];
-                }
-            }
-            return jHaskell;
+            return extendObject(target,mod);
         }
     };
     // ================= end core ======================================
