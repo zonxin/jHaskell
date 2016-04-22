@@ -228,6 +228,12 @@ Enum 类的数据类型需要定义一个 fromEnum 的方法。但是例如 `LT.
     One.fromEnum(); // 1
     One.toNum();  // 1
 
+    // 当然 jHaskell 定义了一种更简单的方式
+    Num = dataEnum("Zero | One"); // 这样生的的类会自动继承 Eq,Ord,Enum,Show 类
+    importAs(Num,window);
+    fromEnum(Zero); // 0
+    Zero.show(); // "Zero"
+
 ## 四. class数据类型类(2)
 
 ### 5. Functor 类(函子)
@@ -336,7 +342,7 @@ fn1~fn3 是可能出错的函数，如果出错直接返回 Nothing 就可以了
 对于 Maybe， <- 的意义就是从Just中取出对应的值(如果后面不是 Just 不再执行后面的
 语句，直接返回这个 Nothing,(bindM的定义)，最终返回值是 `Just([x,10*y])`。由于 Javascript
 是弱类型的语言，最后即使返回`[x,10*y]`，也不会有问题。只是`[x,10*y]` 和 `Nothing`
-不是统一类型的数据。`Nothing` 和 `Just([x,10*y])` 才是同种类型的数据。
+不是同一类型的数据。`Nothing` 和 `Just([x,10*y])` 才是同种类型的数据。
 
     var code = jHaskell.doM(function(){
         x <- [1,2,3];
@@ -432,12 +438,12 @@ fmap 接收两个参数,如果我们只给它提供一个参数,我们来看 fma
 你可能觉得 Functor Law 意义不大，因为不知道有什么用，而且就这么两条。能干什么？
 正是因为它规定的东西少，所以他可以是任何东西。只要满足上面两条，我们就可以用类
 似的代码处理! 当然我们不需要了解上面的 Law，因为我们写代码不需要，Haskell 只需
-要知道Haskell里面说某个东西是函子那么它一定符合上面的 Law (经过了严格的数学证明
+要知道如果Haskell里面说某个东西是函子那么它一定符合上面的 Law (经过了严格的数学证明
 )，后面的 Law 也是。
 
 ### 2. Monad law
 
-    -- bindM 的中缀写法， bindM ma fn 可写作 ma >>= return ,只是优先级不如函数调用高。
+    -- bindM 的中缀写法， bindM ma fn 可写作 ma >>= fn ,只是优先级不如函数调用高。
     1. m >>= return     =  m                          -- right unit
     2. return x >>= f   =  f x                        -- left unit 
     3. (m >>= f) >>= g  =  m >>= (\x -> f x >>= g)    -- associativity
@@ -457,7 +463,7 @@ Either 有两种数据类型组成。比如,Eihter Bool Float类型的值,可以
 
     data Either a b = Left a | Right b
 
-Either 对于第二个参数也是一个函子， bindM 的作用就是，如果是Left 就返回这个
+Either 对于第二个参数也是一个函子， bindM 的作用就是，如果是 Left 就返回这个
 Left，如果是Right就取出Right 中的值，执行后面的函数。这个跟 Maybe 类似，只是
 Nothing 换成了 Left，而 Left 中是可以保存出错原因的。
 

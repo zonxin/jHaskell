@@ -20,6 +20,7 @@ define([
     './export/Show.js',
     // others
     './export/doM.js',
+    './export/dataEnum.js',
     './export/Prelude.js'
  // './export/state.js'
 ],function(jHaskell){

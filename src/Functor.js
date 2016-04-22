@@ -39,7 +39,7 @@ define([
         fmap: function(fn) {
             var arr = [],i,len = this.length;
             for(i=0;i<len;i++){ arr.push(fn(this[i])); }
-            return arr.join("");
+            return arr;
         }
     });
     return Functor;

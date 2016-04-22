@@ -26,7 +26,7 @@ define([
             if(segs.length > 2){throw "doM.parse: parse error;";}
             if(segs.length == 1){ // thenM and let
                 // let
-                if(/[^=]=[^=]/.test(segs)) {
+                if(/[^=!]=[^=]/.test(segs)) {
                     hasLet = "var " + segs[0] + ";" + hasLet;
                     continue;
                 }
