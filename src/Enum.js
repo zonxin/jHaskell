@@ -31,7 +31,8 @@ define([
         },
         toEnum: function (num){ throw "Enum.toEnum:"; },
         // fromEnum
-        toNum: function(){ throw "Enum.toNum:"; }
+        toNum: function(){ this.fromEnum(); },
+        fromEnum: function(){ return this.toNum(); }
     };
     jHaskell.extend({
         succ: function (e) { return e.succ(); },

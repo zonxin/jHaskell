@@ -28,7 +28,7 @@ module.exports = function(grunt) {
             },
             jHaskell:{
                 files:['src/**/*.js','test/**/*.html'],
-                task:['default']
+                tasks:['default']
             }
         },
         "http-server": {
