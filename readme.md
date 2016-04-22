@@ -205,9 +205,10 @@ Ord 类是指可以比较大小的数据类型,属于 Ord 类的数据类型必�
     p1 === p2; // False
     p1.equal(p2); // True
     p1.equal(p3); // False
-    p1.unequal(p3); // False
+    p1.unequal(p3); // True
     elem(p1,[p1,p2,p3]); // True
     // elem 判断一个变量的值是否在一个数组中出现
+    p1.show(); // (4,5)
 
 
 ## 四. class数据类型类(2)
