@@ -1,14 +1,14 @@
 define([
     './core.js',
     './instanceW.js',
-    './Void.js',
+    './Unit.js',
     './Bool/Bool.js',
     './Ordering/Ordering.js',
     './Ordering/LT.js',
     './Ordering/EQ.js',
     './Ordering/GT.js',
     './Float.js'
-],function(jHaskell,instanceW,Void,Bool,Ordering,LT,EQ,GT,Float){
+],function(jHaskell,instanceW,Unit,Bool,Ordering,LT,EQ,GT,Float){
     function Enum(){}
     // class Enum a where
     //   succ   :: a -> a
@@ -56,8 +56,8 @@ define([
         }
     });
     // instance Enum () where
-    instanceW(Enum,Void,{ // Void
-        toEnum: function(num) { if(num === 0) {return Void; }},
+    instanceW(Enum,Unit,{ // Unit
+        toEnum: function(num) { if(num === 0) {return Unit; }},
         toNum: function() { return 0; }
     });
     // instance Enum Bool where

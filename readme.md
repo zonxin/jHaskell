@@ -22,11 +22,11 @@
 
 ## 一. 数据类型(1)
 
-### 1. Void
+### 1. Unit
 
-这个数据类型只有一个值,如果一个变量是 Void 型的，那么它的取值只有一种，那就是
-`Void`，例如`var x = Void;x.show()`。
-也就是说,`Void`既是一个数据类型的名字也是一个值,
+这个数据类型只有一个值,如果一个变量是 Unit 型的，那么它的取值只有一种，那就是
+`Unit`，例如`var x = Unit;x.show()`。
+也就是说,`Unit`既是一个数据类型的名字也是一个值,
 不要弄混。不要认为这种数据类型没有用,这是一种很重要的数据类型。
 
 ### 2. Bool
@@ -122,7 +122,7 @@ unequal 函数。
 Javascript 这种弱类型的语言来说，我们没有任何办法阻止你使用不同类型的参数。但是
 结果就可能不是你预期的结果。其他属于 Eq 类的类型：
 
-    instance Eq Void
+    instance Eq Unit
     instance Eq Bool 
     instance Eq Ordering 
     instance Eq Float 

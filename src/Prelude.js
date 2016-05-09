@@ -1,8 +1,8 @@
 define([
     './core.js',
-    './Void.js',
+    './Unit.js',
     './Ordering/EQ.js'
-],function(jHaskell,Void,EQ){
+],function(jHaskell,Unit,EQ){
 
     var Prelude = {
         elem: function(a,list){
@@ -12,7 +12,7 @@ define([
             }
             return false;
         },
-        guard:function(b){ return b? [Void]:[]; }
+        guard:function(b){ return b? [Unit]:[]; }
     };
 
     return Prelude;

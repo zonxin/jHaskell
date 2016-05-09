@@ -2,7 +2,7 @@ define([
     './core.js',
     './libES/extendClass.js',
     './instanceW.js',
-    './Void.js',
+    './Unit.js',
     './Bool/Bool.js',
     './Ordering/Ordering.js',
     './Ordering/LT.js',
@@ -13,7 +13,7 @@ define([
     './Maybe/Nothing.js',
     './Either/Either.js',
     './List.js'
-],function(jHaskell,extendClass,instanceW,Void,Bool,Ordering,LT,EQ,GT,Float,Maybe,Nothing,Either,List){
+],function(jHaskell,extendClass,instanceW,Unit,Bool,Ordering,LT,EQ,GT,Float,Maybe,Nothing,Either,List){
     function Ord(){}
     // class Eq a => Ord a where
     //  compare :: a -> a -> Ordering
@@ -31,10 +31,10 @@ define([
         ge:function(o){ if(this.compare(o) === LT){ return false; } return true; }
     });
     jHaskell.extend({compare:function(c1,c2){return c1.compare(c2);}});
-    instanceW(Ord,Void,{
+    instanceW(Ord,Unit,{
         compare: function(e) {
-            if(e === Void) { return EQ; }
-            throw "Void.compare: TypeError";
+            if(e === Unit) { return EQ; }
+            throw "Unit.compare: TypeError";
         }
     });
     instanceW(Ord,Bool,{

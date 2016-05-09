@@ -1,7 +1,7 @@
 define([
     './core.js',
     // type
-    './export/Void.js',
+    './export/Unit.js',
     './export/Bool.js',
     './export/Ordering.js',
     './export/Float.js',

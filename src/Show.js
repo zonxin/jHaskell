@@ -2,7 +2,7 @@ define([
     './core.js',
     './libES/extendClass.js',
     './instanceW.js',
-    './Void.js',
+    './Unit.js',
     './Bool/Bool.js',
     './Ordering/Ordering.js',
     './Ordering/LT.js',
@@ -13,14 +13,14 @@ define([
     './Maybe/Nothing.js',
     './Either/Either.js',
     './List.js'
-],function(jHaskell,extendClass,instanceW,Void,Bool,Ordering,LT,EQ,GT,Float,Maybe,Nothing,Either,List){
+],function(jHaskell,extendClass,instanceW,Unit,Bool,Ordering,LT,EQ,GT,Float,Maybe,Nothing,Either,List){
     // class Show a where
     //     show :: a -> String
     function Show(){}
     Show.prototype.show = function() { return this.toString(); };
     jHaskell.extend({show:function(s){return s.show();}});
 
-    instanceW(Show,Void,{ show: function(){ return "Void"; } });
+    instanceW(Show,Unit,{ show: function(){ return "Unit"; } });
     instanceW(Show,Bool,{ show: function(){ return this.valueOf()? "True":"False";} });
     instanceW(Show,Ordering,{
         show: function(){

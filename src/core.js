@@ -41,8 +41,7 @@ define([
                 mod = jHaskell;
                 target = global;
             }else if(arguments.length === 1){
-                target = mod;
-                mod = this;
+                target = global;
             }
             return extendObject(target,mod);
         }

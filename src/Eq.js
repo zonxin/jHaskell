@@ -1,7 +1,7 @@
 define([
     './core.js',
     './instanceW.js',
-    './Void.js',
+    './Unit.js',
     './Bool/Bool.js',
     './Ordering/Ordering.js',
     './Float.js',
@@ -9,7 +9,7 @@ define([
     './Maybe/Nothing.js',
     './Either/Either.js',
     './List.js'
-],function(jHaskell,instanceW,Void,Bool,Ordering,Float,Maybe,Nothing,Either,List){
+],function(jHaskell,instanceW,Unit,Bool,Ordering,Float,Maybe,Nothing,Either,List){
     // class Eq a where
     //     (==),(/=)  :: a -> a-> Bool
     //     x /= y = not (x==y)
@@ -24,10 +24,10 @@ define([
         unequal: function(e1,e2) { return e1.unequal(e2); }
     });
     // instance Eq () where
-    instanceW(Eq,Void,{
+    instanceW(Eq,Unit,{
         equal: function(e) { 
-            if(e === Void) { return true; } 
-            throw "Void.equal: TypeError";
+            if(e === Unit) { return true; } 
+            throw "Unit.equal: TypeError";
         }
     });
     // instance Eq Bool where

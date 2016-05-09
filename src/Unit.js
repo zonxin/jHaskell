@@ -1,14 +1,14 @@
 define([ ],function(){
     // data () = ()
 
-    var Void = function(){};
-    Void = new Void();
-    Void.prototype = Void.constructor.prototype;
+    var Unit = function(){};
+    Unit = new Unit();
+    Unit.prototype = Unit.constructor.prototype;
     // instance Eq ()
     // instance Ord ()
     // instance Enum ()
     // instance Show ()
     // instance Monoid ()
 
-    return Void;
+    return Unit;
 });
