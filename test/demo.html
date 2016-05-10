@@ -46,7 +46,8 @@ jHaskell.importAs();
             }, "Output Pretty Code");
 
         // console.log(code);
-        return eval(code);
+        var r = eval(code);
+        return maybe("Error",x=>x,r);
     }
     console.log(getGrandparents("Peter1").show());
     console.log(getGrandparents("Peter2").show());
@@ -89,7 +90,8 @@ jHaskell.importAs();
                 returnM([dad,mom,gp1,gp2,gp3,gp4],Either);
             }, "Output Pretty Code");
         // console.log(code);
-        return eval(code);
+        var r = eval(code);
+        return either(x=>"Error:"+x,x=>x,r);
     }
     console.log("=================================================")
     console.log(getGrandparents("Peter1").show());
