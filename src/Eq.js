@@ -5,11 +5,8 @@ define([
     './Bool/Bool.js',
     './Ordering/Ordering.js',
     './Float.js',
-    './Maybe/Maybe.js',
-    './Maybe/Nothing.js',
-    './Either/Either.js',
     './List.js'
-],function(jHaskell,instanceW,Unit,Bool,Ordering,Float,Maybe,Nothing,Either,List){
+],function(jHaskell,instanceW,Unit,Bool,Ordering,Float,List){
     // class Eq a where
     //     (==),(/=)  :: a -> a-> Bool
     //     x /= y = not (x==y)
@@ -41,29 +38,6 @@ define([
     // instance Eq Float where
     instanceW(Eq,Float,{
         equal: function(e) { return this.valueOf() === e.valueOf(); }
-    });
-    // instance Eq a => Eq (Maybe a) where
-    instanceW(Eq,Maybe,{
-        equal: function (m) {
-            if(this === Nothing){
-                return m === Nothing? true:false;
-            }else{
-                return this.value.equal(m.value);
-            }
-        }
-    });
-    // instance (Eq a, Eq b) => Eq (Either a b) where
-    instanceW(Eq,Either,{
-        equal: function (e) {
-            var obj1 = this.isLeft(),
-                obj2 = e.isLeft();
-            if(obj1 && obj2) { return obj1.value.equal(obj2.value); }
-            if(obj1 && !obj2) { return false; }
-            obj1 = this.isRight();
-            obj2 = e.isRight();
-            if(obj1 && obj2) { return obj1.value.equal(obj2.value); }
-            return false;
-        }
     });
     // instance Eq a => Eq [a] where
     instanceW(Eq,List,{

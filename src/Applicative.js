@@ -3,14 +3,8 @@ define([
     './libES/extendClass.js',
     './Functor.js',
     './instanceW.js',
-    './Maybe/Maybe.js',
-    './Maybe/Nothing.js',
-    './Maybe/Just.js',
-    './Either/Either.js',
-    './Either/Left.js',
-    './Either/Right.js',
     './List.js'
-],function(jHaskell,extendClass,Functor,instanceW,Maybe,Nothing,Just,Either,Left,Right,List){
+],function(jHaskell,extendClass,Functor,instanceW,List){
     // class Functor f =>  Applicative f where
     //     pure :: a -> f a
     //     (<*>) :: Applicative f => f (a->b) -> f a -> f b
@@ -32,22 +26,7 @@ define([
         },
         applyTo: function(fn,fvalue){ return fn.applyTo(fvalue); }
     });
-    instanceW(Applicative,Maybe,{
-        pure: Just,
-        applyTo: function (mValue) {
-            if(this === Nothing) { return Nothing; }
-            return mValue.fmap(this.value);
-        }
-    });
-    instanceW(Applicative,Either,{
-        pure: Right,
-        applyTo: function(mValue) {
-            var obj = this.isLeft();
-            if(obj) { return new Left(obj.value); }
-            obj = this.isRight();
-            return mValue.fmap(obj.value);
-        }
-    });
+
     instanceW(Applicative,List,{
         pure: function (x){ return [x]; },
         applyTo: function (mValue){

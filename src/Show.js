@@ -9,11 +9,8 @@ define([
     './Ordering/EQ.js',
     './Ordering/GT.js',
     './Float.js',
-    './Maybe/Maybe.js',
-    './Maybe/Nothing.js',
-    './Either/Either.js',
     './List.js'
-],function(jHaskell,extendClass,instanceW,Unit,Bool,Ordering,LT,EQ,GT,Float,Maybe,Nothing,Either,List){
+],function(jHaskell,extendClass,instanceW,Unit,Bool,Ordering,LT,EQ,GT,Float,List){
     // class Show a where
     //     show :: a -> String
     function Show(){}
@@ -32,20 +29,8 @@ define([
     instanceW(Show,Float,{
         show: function () { return this.toString(); }
     });
-    instanceW(Show,Maybe,{
-        show: function() {
-            if (this === Nothing) { return "Nothing"; }
-            return "Just " + this.value.show();
-        }
-    });
-    instanceW(Show,Either,{
-        show: function() {
-            var obj = this.isLeft();
-            if(obj) { return "Left " + obj.value.show(); }
-            obj = this.isRight();
-            return "Right " + obj.value.show();
-        }
-    });
+
+
     instanceW(Show,List,{
         show: function (){
             var len = this.length, str = "[",i;

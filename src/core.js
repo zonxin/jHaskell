@@ -7,34 +7,23 @@ define([
 
     var jHaskell = {
         extend:extendObject,
-        currying:currying,
         compose:compose,
         instanceW:instanceW,
-        id: function (x) { return x; },
-        currying2:function(fn){ return function(a){ return function (b) {return fn(a,b);}; }; },
-        currying3:function(fn){ return function(a){ return function (b) { return function(c) { return fn(a,b,c);}; }; }; },
-        currying4:function(fn){ return function(a){ return function (b) { 
-            return function(c){ return function(d){ return fn(a,b,c,d);
-        }; }; }; };},
-        currying5:function(fn){ return function(a){ return function (b) { 
-            return function(c){ return function(d){ return function (e) {
-                return fn(a,b,c,d,e);
-        }; }; }; };};},
-        currying6:function(fn){ return function(a){ return function (b) { 
-            return function(c){ return function(d){ return function (e) {
-            return function(f){
-                return fn(a,b,c,d,e,f);
-        }; }; }; };};};},
-        currying7:function(fn){ return function(a){ return function (b) { 
-            return function(c){ return function(d){ return function (e) {
-            return function(f){ return function(g){
-                return fn(a,b,c,d,e,f,g);
-        }; }; }; };};};};},
-        currying8:function(fn){ return function(a){ return function(b) { 
-            return function(c){ return function(d){ return function(e) {
-            return function(f){ return function(g){ return function(h) {
-                return fn(a,b,c,d,e,f,g,h);
-        }; }; }; };};};};};},
+        moduleW:function(ns,factory){
+            var nslist = ns.split("."),
+                endfor = nslist.length - 1,
+                i,p,name;
+            p = jHaskell;
+            for(i=0; i<endfor;i++){
+                name = nslist[i];
+                if(p[name] === undefined){
+                    p[name] = {};
+                }
+                p = p[name];
+            }
+            name = nslist[i];
+            p[name] = factory();
+        },
         importAs: function(mod,target){
             var k;
             if(arguments.length === 0) {
@@ -46,6 +35,7 @@ define([
             return extendObject(target,mod);
         }
     };
+    jHaskell.extend(currying);
     // ================= end core ======================================
     return jHaskell;
 });
