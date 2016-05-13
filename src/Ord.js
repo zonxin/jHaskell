@@ -21,9 +21,19 @@ define([
         lt:function(o){ if(this.compare(o) === LT){ return true; } return false; },
         le:function(o){ if(this.compare(o) === GT){ return false; } return true; },
         gt:function(o){ if(this.compare(o) === GT){ return true; } return false; },
-        ge:function(o){ if(this.compare(o) === LT){ return false; } return true; }
+        ge:function(o){ if(this.compare(o) === LT){ return false; } return true; },
+        max: function(o) { return this.lt(o)? o:this; },
+        min: function(o) { return this.lt(o)? this:o; }
     });
-    jHaskell.extend({compare:function(c1,c2){return c1.compare(c2);}});
+    jHaskell.extend({
+        compare:function(c1,c2){return c1.compare(c2);},
+        lt: function(c1,c2) { return c1.lt(c2); },
+        le: function(c1,c2) { return c1.le(c2); },
+        gt: function(c1,c2) { return c1.gt(c2); },
+        ge: function(c1,c2) { return c1.ge(c2); },
+        max: function(x,y){ return x.max(y); },
+        min: function(x,y){ return x.min(y); }
+    });
     instanceW(Ord,Unit,{
         compare: function(e) {
             if(e === Unit) { return EQ; }
@@ -67,8 +77,6 @@ define([
             throw "Float.compare: TypeError";
         }
     });
-
-
     instanceW(Ord,List,{
         compare:function(list){
             var len1 = this.length,
@@ -82,8 +90,8 @@ define([
                     case GT: return GT;
                 }
             }
-            if(len1 < len2) { return LT;}
-            if(len1 > len2) { return GT;}
+            if(len1.lt(len2)) { return LT;}
+            if(len1.gt(len2)) { return GT;}
             return EQ;
         }
     });

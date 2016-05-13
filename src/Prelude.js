@@ -45,13 +45,17 @@ define([
         mempty: Data.Monoid.mempty,
         mappend: Data.Monoid.mappend,
 
-        elem: function(a,list){
-            var len = list.length, i;
-            for(i=0;i<len;i++){
-                if( list[i].equal(a)){ return true; }
-            }
-            return false;
-        },
+        map: List.map, filter:List.filter,
+        foldl: List.foldl, foldl1: List.foldl1,
+        foldr: List.foldr, foldr1: List.foldr1,
+        elem: List.elem,notElem:List.notElem,
+        and:List.and,or:List.or,any:List.any,all:List.all,
+        sum:List.sum,product:List.product,
+        take:List.take,drop:List.drop,
+        takeRepeat:List.takeRepeat,
+        takeCycle: List.takeCycle,
+        zipWith:List.zipWith,
+
         guard: function(b){ return b? [Unit]:[]; },
         // even :: Float -> Bool
         even: function(n) { return n%2 === 0; },

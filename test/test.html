@@ -6,15 +6,35 @@
         <script src="../dest/jHaskell.min.js"></script>
         <script src="http://localhost:9001/livereload.js"></script>
         <title>for test</title>
+        <style>
+            body { background:#95a5a6; font-size:25px;line-height:1.5em; }
+            div { width:600px;margin:0px auto;background:#ecf0f1;padding:2em;
+                box-shadow:3px 3px 8px #7f8c8d;border-radius:10px}
+        </style>
     </head>
     <body>
 <script>
     jHaskell.importAs();
 </script>
+<div>
+<p>
+1、验证信用卡卡号(最长16位)：如果卡号有偶数位，每个奇数位的数字乘以2,否则所有偶数为的数字
+乘以2.如果乘以2 之后大于 9 ，则该数字减去 9。 把得到的所有数字相加，如果的到的
+结果是 10 的倍数则为合法的信用卡卡号。
 <script>
+    // Integer -> Bool
+function validCardNO(n){
+    var mul2 = x => x*2,
+        ap = function(fn,p) { return fn(p); },
+        digits = x => x.show().fmap(parseInt);
+
+    return sum(zipWith(ap, takeCycle(16,[id,compose(sum,digits,mul2)]), digits(n).reverse()))%10 === 0;
+}
 </script>
-<script>
-</script>
+</p>
+</div>
     </body>
     
 </html>
+
+

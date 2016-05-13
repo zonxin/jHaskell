@@ -7,6 +7,8 @@
     # 全局安装 grunt-cli 只需要安装一次, linux 可能需要管理员权限
     npm install -g grunt-cli 
     
+    git clone https://github.com/zonxin/jHaskell.git
+    cd jHaskell
     # 安装依赖模块
     npm install
     # 编译
@@ -15,6 +17,8 @@
 # 基本教程
 
 ## 零. 准备工作
+
+此处教程主要目的是为了解释一些概念。
 
 方便写代码，首先在网页里执行，`jHaskell.importAs()`，这样，
 `jHaskell.equal(1,2)` 就可以简写为`equal(1,2)`了。下载整个工程编译之后，可以直
