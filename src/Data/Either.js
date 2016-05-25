@@ -6,11 +6,15 @@ define([
         function Either(){}
         jHaskell.extend(Either.prototype,{
             isLeft:function() {
-                if(this._lr_ === "left") { return {value:this.left}; }
+                if(this._lr_ === "left") { return true; }
                 return false;
             },
             isRight: function() {
-                if(this._lr_ === "right") { return {value:this.right}; }
+                if(this._lr_ === "right") { return true; }
+                return false;
+            },
+            getEither: function(){
+                return this[this._lr_];
             },
             toString: function() { return this.show(); }
         });
@@ -29,77 +33,73 @@ define([
         // instance (Eq a, Eq b) => Eq (Either a b) where
         instanceW(Eq,Either,{
             equal: function (e) {
-                var obj1 = this.isLeft(),
-                    obj2 = e.isLeft();
-                if(obj1 && obj2) { return obj1.value.equal(obj2.value); }
-                if(obj1 && !obj2) { return false; }
-                obj1 = this.isRight();
-                obj2 = e.isRight();
-                if(obj1 && obj2) { return obj1.value.equal(obj2.value); }
+                var n = 0;
+                if(this.isRight()) { n += 1; }
+                if(e.isRight()) { n += 2; }
+                if(n === 3 || n === 0){
+                    return this.getEither().equal(e.getEither());
+                }
                 return false;
             }
         });
         // instance Ord a => Ord (Either a)
         instanceW(Ord,Either,{
             compare: function(e) {
-                var obj1 = this.isLeft(),
-                    obj2 = e.isLeft();
-                if(obj1 && obj2) { return obj1.value.compare(obj2.value); }
-                if(obj1 && !obj2) { return GT; }
-                obj1 = this.isRight();
-                obj2 = e.isRight();
-                if(obj1 && obj2) { return obj1.value.compare(obj2.value); }
+                var n = 0;
+                if(this.isRight()) { n += 1; }
+                if(e.isRight()) { n += 2; }
+                if(n === 3 || n === 0){
+                    return this.getEither().compare(e.getEither());
+                }else if(n === 1){
+                    return GT;
+                }
                 return LT;
             }
         });
         // instance Show a => Show (Either a)
         instanceW(Show,Either,{
             show: function() {
-                var obj = this.isLeft();
-                if(obj) { return "Left " + obj.value.show(); }
-                obj = this.isRight();
-                return "Right " + obj.value.show();
+                if(this.isLeft()){
+                    return "Left " + this.getEither().show();
+                }
+                return "Right " + this.getEither().show();
             }
         });
         // instance Monoid a => Monoid (Either a)
         // instance Functor Either
         instanceW(Functor,Either,{
             fmap: function(fn){
-                var obj = this.isLeft();
-                if(obj) { return new Left(obj.value); }
-                obj = this.isRight();
-                return new Right(fn(obj.value));
+                if(this.isLeft()){ return this; }
+                return new Right(fn(this.getEither()));
             }
         });
         // instance Applicative Either
         instanceW(Applicative,Either,{
             pure: Right,
             applyTo: function(mValue) {
-                var obj = this.isLeft();
-                if(obj) { return new Left(obj.value); }
-                obj = this.isRight();
-                return mValue.fmap(obj.value);
+                if(this.isLeft()){ return this; }
+                return mValue.fmap(this.getEither());
             }
         });
         // instance Monad Either
         instanceW(Monad,Either,{
             bindM: function(fn){
                 var obj = this.isLeft();
-                if(obj) { return new Left(obj.value); }
-                obj = this.isRight();
-                return fn.call(arguments[1],obj.value);
+                if(this.isLeft()){ return this; }
+                return fn.call(null,this.getEither());
             }
         });
         return {
             Either:Either,Left:Left,Right:Right,
             // either :: (a -> c) -> (b -> c) -> Either a b -> c
             either: function(fa,fb,eab,c){
-                var itis = eab.isLeft();
-                if(itis){ return fa(itis.value); }
-                itis = eab.isRight();
-                return fb(itis.value);
+                if(eab.isLeft()){
+                    return fa(eab.getEither());
+                }
+                return fb(eab.getEither());
             }
         };
     });
-    return jHaskell.Data.Either;
+
+    return jHaskell.Data.Either.Either;
 });

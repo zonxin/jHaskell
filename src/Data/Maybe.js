@@ -20,7 +20,10 @@ define([
         jHaskell.extend(Maybe.prototype,{
             isJust:function(){
                 if(this === Nothing) { return false; }
-                return {value:this.value};
+                return true;
+            },
+            getMaybe: function(){
+                return this.value;
             },
             toString:function (){
                 return this.show();
@@ -85,6 +88,6 @@ define([
             }
         };
     });
-    var Maybe = jHaskell.Data.Maybe;
+    var Maybe = jHaskell.Data.Maybe.Maybe;
     return Maybe;
 });

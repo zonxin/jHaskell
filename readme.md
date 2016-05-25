@@ -526,8 +526,10 @@ Nothing 换成了 Left，而 Left 中是可以保存出错原因的。写个例�
     // try{ ... } catch(e){ ... }
     function catchE(ma,fn)
     {
-        var e = ma.isLeft();
-        return e ? fn(e.value) : ma;
+        if(ma.isLeft()){
+            return fn(ma.getEither());
+        }
+        return ma;
     }
 
     // 模拟从数据库查询一个人的父/母
