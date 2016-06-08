@@ -19,18 +19,24 @@
 </script>
 <div>
 <p>
-1、验证信用卡卡号(最长16位)：如果卡号有偶数位，每个奇数位的数字乘以2,否则所有偶数为的数字
+1、验证信用卡卡号(最长16位)：如果卡号有偶数位，每个奇数位的数字乘以2,否则所有偶数位的数字
 乘以2.如果乘以2 之后大于 9 ，则该数字减去 9。 把得到的所有数字相加，如果的到的
 结果是 10 的倍数则为合法的信用卡卡号。
 <script>
     // Integer -> Bool
 function validCardNO(n){
-    var mul2 = x => x*2,
-        ap = function(fn,p) { return fn(p); },
-        digits = x => x.show().fmap(parseInt);
-
-    return sum(zipWith(ap, takeCycle(16,[id,compose(sum,digits,mul2)]), digits(n).reverse()))%10 === 0;
+    var mul2   = x      => x*2,
+        mod9   = x      => x%9,
+        mod10  = x      => x%10,
+        equal0 = x      => x===0,
+        ap     = (fn,p) => fn(p),
+        digits = x      => x.show().fmap(parseInt),
+        fnArr   = takeCycle(16,[id,compose(mod9,mul2)]);
+    return compose(equal0,mod10,sum)(zipWith(ap,fnArr,digits(n).reverse()));
 }
+console.log(validCardNO(1));  // fasle
+console.log(validCardNO(2121)); // true
+console.log(validCardNO(123)); // fasle
 </script>
 </p>
 </div>

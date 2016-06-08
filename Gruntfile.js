@@ -37,7 +37,7 @@ module.exports = function(grunt) {
                 livereload: 9001
             },
             jHaskell:{
-                files:['src/**/*.js','test/**/*.html'],
+                files:['src/**/*.js','test/**/*'],
                 tasks:['default']
             }
         },

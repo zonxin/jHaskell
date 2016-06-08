@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>Lisp</title>
+    <meta charset="utf-8">
+    <script src="http://10.0.0.199:9001/livereload.js"></script>
+    <script src="../dest/jHaskell.js"></script>
+    <script src="Parser.js"></script>
+    <script src="http://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script> 
+    <script src='jQuery.repl.js'></script>
+    <script src='main.js'></script>
+    <script type='text/javascript'>
+        $(document).ready(function(){ 
+            $('#input').repl({ 
+                prompt:"Lisp>",
+                startMessage: "# javascript lisp",
+                loop: main
+            });
+        });
+    </script>
+    <style>
+        body,input { 
+            background:black;
+            color:#00FF00; 
+            border: none ;
+            font-size: 25px;
+        }
+        input { width:70% }
+        p{ margin:0.25em }
+        div{margin:0}
+    </style>
+  </head>
+  <body>
+    <form>
+      <input id='input' type='text' autocomplete="off">
+    </form>
+  </body>
+</html>
