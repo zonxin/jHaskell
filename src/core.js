@@ -1,12 +1,14 @@
 define([
     './libES/extendObject.js',
+    './libES/extendClass.js',
     './currying.js',
     './compose.js',
     './instanceW.js'
-],function (extendObject,currying,compose,instanceW){
+],function (extendObject,extendClass,currying,compose,instanceW){
 
     var jHaskell = {
         extend:extendObject,
+        extendClass:extendClass,
         compose:compose,
         instanceW:instanceW,
         moduleW:function(ns,factory){

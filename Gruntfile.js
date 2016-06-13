@@ -3,11 +3,16 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
         build:{
-            compile:{ src:["src/jHaskell.js"],dest:"dest/jHaskell.js"}
+            compile:{ src:["src/jHaskell.js"],dest:"dest/jHaskell.js"},
+            Trans:{
+                options:{ wrap: { startFile: "src/Control/Monad/Trans/intro.js", endFile: [ "src/Control/Monad/Trans/outro.js" ] } },
+                src:["src/Control/Monad/Trans/Trans.js"],
+                dest:"dest/jHaskell.Control.Monad.Trans.js"
+            }
         },
         jshint:{
-            beforecompile:["src/**/*.js","!src/intro.js","!src/outro.js"],
-            aftercompile:["dest/jHaskell.js"],
+            beforecompile:["src/**/*.js","!src/**/intro.js","!src/**/outro.js"],
+            aftercompile:["dest/jHaskell.js","dest/jHaskell.Control.Monad.Trans.js"],
             options:{
                 validthis:true,evil:true
             }
@@ -15,11 +20,16 @@ module.exports = function(grunt) {
         uglify:{
             options:{
                 banner:'/*! <%= pkg.name %>\n * author:<%= pkg.author %>\n * released license:<%= pkg.license %> \n */',
-                sourceMap: true,
-                sourceMapName: "dest/jHaskell.min.map"
+                sourceMap: true
             },
             complie:{
                 files:[{src:['dest/jHaskell.js'],dest:"dest/jHaskell.min.js"} ]
+            },
+            Trans:{
+                files:[{
+                    src:["dest/jHaskell.Control.Monad.Trans.js"],
+                    dest:"dest/jHaskell.Control.Monad.Trans.min.js"
+                }]
             }
         },
         watch:{
